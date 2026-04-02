@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactQuill from "react-quill";
 import { replacePlaceholders } from "../../../utils/templateReplacer";
 import { api } from "../../api";
 import {
@@ -39,7 +40,7 @@ export default function EnhancedScheduleModal({
 
   const [accounts, setAccounts] = useState([]);
   const [selectedAccountId, setSelectedAccountId] = useState(
-    selectedAccount?.id || null
+    selectedAccount?.id || null,
   );
 
   // --- Status & Templates ---
@@ -118,7 +119,7 @@ export default function EnhancedScheduleModal({
 
     // Filter valid emails
     const validRecipients = resolved.filter(
-      (r) => r.email && r.email.includes("@")
+      (r) => r.email && r.email.includes("@"),
     );
 
     setRecipients(validRecipients);
@@ -259,7 +260,7 @@ export default function EnhancedScheduleModal({
 
       const res = await api.post(
         `${API_BASE_URL}/api/scheduled-messages/bulk`,
-        payload
+        payload,
       );
 
       if (res.data.success) {
@@ -269,7 +270,8 @@ export default function EnhancedScheduleModal({
     } catch (err) {
       console.error("❌ Bulk schedule error:", err);
       alert(
-        "❌ Failed to schedule: " + (err.response?.data?.message || err.message)
+        "❌ Failed to schedule: " +
+          (err.response?.data?.message || err.message),
       );
     } finally {
       setIsSubmitting(false);
@@ -285,12 +287,12 @@ export default function EnhancedScheduleModal({
     const recommended = templates.filter(
       (t) =>
         t.leadStatus &&
-        t.leadStatus.toLowerCase() === selectedLeadStatus.toLowerCase()
+        t.leadStatus.toLowerCase() === selectedLeadStatus.toLowerCase(),
     );
     const others = templates.filter(
       (t) =>
         !t.leadStatus ||
-        t.leadStatus.toLowerCase() !== selectedLeadStatus.toLowerCase()
+        t.leadStatus.toLowerCase() !== selectedLeadStatus.toLowerCase(),
     );
     return { recommended, others };
   };
@@ -398,7 +400,7 @@ export default function EnhancedScheduleModal({
                   value={selectedTemplate?.id || ""}
                   onChange={(e) => {
                     const t = templates.find(
-                      (temp) => temp.id === Number(e.target.value)
+                      (temp) => temp.id === Number(e.target.value),
                     );
                     setSelectedTemplate(t);
                   }}
@@ -537,14 +539,11 @@ export default function EnhancedScheduleModal({
                         handleRecipientChange(i, "subject", e.target.value)
                       }
                     />
-                    <textarea
-                      className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm h-28 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none transition-all resize-y placeholder-gray-400"
-                      placeholder="Type message or select a template..."
-                      value={r.body
-                        .replace(/<br>/g, "\n")
-                        .replace(/<[^>]+>/g, "")}
-                      onChange={(e) =>
-                        handleRecipientChange(i, "body", e.target.value)
+                    <ReactQuill
+                      theme="snow"
+                      value={r.body}
+                      onChange={(value) =>
+                        handleRecipientChange(i, "body", value)
                       }
                     />
                   </div>
