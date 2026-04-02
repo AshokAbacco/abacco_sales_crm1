@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserDashboard from "./pages/EmployeeDashboard";
 import Login from "./pages/Login";
+import "react-quill/dist/quill.snow.css";
 
 function App() {
   const getUser = () => {
